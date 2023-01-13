@@ -54,9 +54,9 @@ def process_file(fname):
            
            #result report
            try:
-               dup_found.index(dindex) 
+               dup_found.index(dindex) #ignore
            except:
-               dup_found.append(dindex)  
+               dup_found.append(dindex)  #add duplicate
                
            temp_duplicate_macro = temp_duplicate_macro + 1                               
        else:
@@ -87,7 +87,7 @@ def macro_export(mname, mfile, mline):
     worksheet.write('B1', "CSV Filename")
     worksheet.write('C1', "Code Filenames")
     worksheet.write('D1', "Line of Code")
-    worksheet.write('E1', "Duplicate Macro Count")
+    worksheet.write('E1', "Duplicate Macro Count (found:" + str(len(result_macroname)) +")")
     
     ex_len = len(mname)
     
@@ -130,5 +130,6 @@ if __name__ == '__main__':
     print("Total macro: " + str(len(result_macroname)))
     print("============================================")    
     print("see output result on file: result.xlsx")
+    input("\n\nPress enter to continue")
     
        
