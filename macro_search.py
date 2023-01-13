@@ -11,6 +11,7 @@ M_TRUE = 1
 M_FALSE = 0
 dfoundidx = 0
 dup_found = []
+report_summmary = []
 
 
 def ty_read_csv_file(fpath):
@@ -122,7 +123,30 @@ def macro_export(mname, mfile, mline, excel_fname):
     worksheet.write('A' + str(e+5), "TOTAL NUMBER of DUPLICATE MACRO", text_format)
     worksheet.write('B' + str(e+5),str(len(dup_found)), text_format)
 
+    report_summmary.append([excel_fname,str(ex_len),str(len(dup_found))])
+
     workbook.close()
+
+def macro_export_summary(): 
+    workbook = xlsxwriter.Workbook('macro_export_summary.xlsx')
+    worksheet = workbook.add_worksheet()
+    text_format = workbook.add_format({'text_wrap': True})
+    worksheet.set_column('A:A', 50)
+    worksheet.set_column('B:B', 50)
+    worksheet.set_column('C:C', 50)
+
+    worksheet.write('A1', "CSV NAME")
+    worksheet.write('B1', "MACRO COUNT")
+    worksheet.write('C1', "DUPLICATE Count")
+
+    ex_len = len(report_summmary)  
+
+    for e in range(ex_len):
+        worksheet.write('A' + str(e+2), str(report_summmary[e][0]), text_format)
+        worksheet.write('B' + str(e+2), str(report_summmary[e][1]), text_format)
+        worksheet.write('C' + str(e+2), str(report_summmary[e][2]), text_format)
+    workbook.close()    
+
 
 if __name__ == '__main__':
     
@@ -131,6 +155,7 @@ if __name__ == '__main__':
         # Prints only text file present in My Folder
         process_file(str(x))
         macro_export(result_macroname,result_filename,result_line_number,str(x)) 
+    macro_export_summary()
     
     
     
