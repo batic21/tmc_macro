@@ -11,6 +11,7 @@ M_FALSE = 0
 dfoundidx = 0
 dup_found = []
 
+
 def ty_read_csv_file(fpath):
       return   pd.read_csv(fpath)
   
@@ -55,6 +56,7 @@ def process_file(fname):
            #result report
            try:
                dup_found.index(dindex) #ignore
+               #print("ignore")
            except:
                dup_found.append(dindex)  #add duplicate
                
@@ -87,7 +89,7 @@ def macro_export(mname, mfile, mline):
     worksheet.write('B1', "CSV Filename")
     worksheet.write('C1', "Code Filenames")
     worksheet.write('D1', "Line of Code")
-    worksheet.write('E1', "Duplicate Macro Count (found:" + str(len(result_macroname)) +")")
+    worksheet.write('E1', "Duplicate Macro Count (found:" + str(len(dup_found)) +")")
     
     ex_len = len(mname)
     
