@@ -59,8 +59,8 @@ def process_file(fname):
                #print("ignore")
            except:
                dup_found.append(dindex)  #add duplicate
-               
-           temp_duplicate_macro = temp_duplicate_macro + 1                               
+               temp_duplicate_macro = temp_duplicate_macro + 1
+                                                         
        else:
            result_macroname.append(str(df.loc[r][0]))
            result_csvfile.append([fname])
