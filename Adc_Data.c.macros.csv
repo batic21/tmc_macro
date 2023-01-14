@@ -1,4 +1,5 @@
-MACRO_NAME,FILE_LOCATION,LINE_NUMBERADC_H_INCLUDED,D:/TOY_XXXX_23_GW/TOY_XXXX_23_GW_SW/mc_sw/source/BSW/EB/swp_ar4x_tv2/modules/em_adc/tresos/eclipse/plugins/adc/include/Adc.h,26
+MACRO_NAME,FILE_LOCATION,LINE_NUMBER
+ADC_H_INCLUDED,D:/TOY_XXXX_23_GW/TOY_XXXX_23_GW_SW/mc_sw/source/BSW/EB/swp_ar4x_tv2/modules/em_adc/tresos/eclipse/plugins/adc/include/Adc.h,26
 ADC_TYPES_H_INCLUDED,D:/TOY_XXXX_23_GW/TOY_XXXX_23_GW_SW/mc_sw/source/BSW/EB/swp_ar4x_tv2/modules/em_adc/tresos/eclipse/plugins/adc/lib_include/Adc_Types.h,25
 STD_TYPES_H,D:/TOY_XXXX_23_GW/TOY_XXXX_23_GW_SW/mc_sw/source/BSW/EB/swp_ar4x_generic/modules/em_base/tresos/eclipse/plugins/base/include/Std_Types.h,3
 PLATFORM_TYPES_H,D:/TOY_XXXX_23_GW/TOY_XXXX_23_GW_SW/product_environment/Variant_HV/out/bs_4M_startupkit/gen/Platform_Types.h,2

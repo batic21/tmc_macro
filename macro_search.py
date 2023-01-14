@@ -30,52 +30,56 @@ def check_duplicate(val_word):
 def process_file(fname):
     df =  ty_read_csv_file(fname)     
     m_row_count = len(df)
-    progress = 0
-    progress_div = float(100/m_row_count)
+    progress = 0    
     prg_crt=0        
     temp_duplicate_macro = 0
-
     result_macroname.clear()
     result_filename.clear()
     result_line_number.clear()
     result_csvfile.clear()
     dup_found.clear()
-    dfoundidx = 0
-
+    #dfoundidx = 0
     
-    for r in range(m_row_count):
-       if prg_crt == 500:
-            print(fname + ": " + str(int(progress)) + "%", end="\r")
-            prg_crt = 0
-       else:
-            prg_crt = prg_crt + 1
-       progress = progress + progress_div
-      # print(str(r + 2)+": " + df.loc[r][0] + " : " + str(df.loc[r][1])  + " : " + str(df.loc[r][2]))
+    if m_row_count > 0:
+        progress_div = float(100/m_row_count)
+
+         
+        for r in range(m_row_count):
+           if prg_crt == 500:
+                print(fname + ": " + str(int(progress)) + "%", end="\r")
+                prg_crt = 0
+           else:
+                prg_crt = prg_crt + 1
+           progress = progress + progress_div
+          # print(str(r + 2)+": " + df.loc[r][0] + " : " + str(df.loc[r][1])  + " : " + str(df.loc[r][2]))
        
-       dfound, dindex = check_duplicate(df.loc[r][0])
+           dfound, dindex = check_duplicate(df.loc[r][0])
        
-       if dfound == M_TRUE:   
-           #print("======duplicate found  index = " + str(dindex) + "found index" + str(dfoundidx))    
-           #print(result_filename) 
-           #result_csvfile[dindex].append([fname])
-           result_filename[dindex].append(os.path.basename(str(df.loc[r][1])))
-           result_line_number[dindex].append(df.loc[r][2])                       
+           if dfound == M_TRUE:   
+               #print("======duplicate found  index = " + str(dindex) + "found index" + str(dfoundidx))    
+               #print(result_filename) 
+               #result_csvfile[dindex].append([fname])
+               result_filename[dindex].append(os.path.basename(str(df.loc[r][1])))
+               result_line_number[dindex].append(df.loc[r][2])                       
            
-           #result report
-           try:
-               dup_found.index(dindex) #ignore
-               #print("ignore")
-           except:
-               dup_found.append(dindex)  #add duplicate
-               temp_duplicate_macro = temp_duplicate_macro + 1
+               #result report
+               try:
+                   dup_found.index(dindex) #ignore
+                   #print("ignore")
+               except:
+                   dup_found.append(dindex)  #add duplicate
+                   temp_duplicate_macro = temp_duplicate_macro + 1
                                                          
-       else:
-           result_macroname.append(str(df.loc[r][0]))
-           #result_csvfile.append([fname])
-           #tidx = result_macroname.index(str(df.loc[r][0]))
-           result_filename.append([os.path.basename(str(df.loc[r][1]))])
-           result_line_number.append([df.loc[r][2]])
-        
+           else:
+               result_macroname.append(str(df.loc[r][0]))
+               #result_csvfile.append([fname])
+               #tidx = result_macroname.index(str(df.loc[r][0]))
+               result_filename.append([os.path.basename(str(df.loc[r][1]))])
+               result_line_number.append([df.loc[r][2]])
+    else:
+            result_macroname.append('N/A')
+            result_filename.append('N/A')
+            result_line_number.append(None)
        
        
     #time.sleep(0.01)   
@@ -87,6 +91,7 @@ def macro_export(mname, mfile, mline, excel_fname):
     workbook = xlsxwriter.Workbook('result_' + excel_fname + '.xlsx')
     worksheet = workbook.add_worksheet()
     text_format = workbook.add_format({'text_wrap': True})
+    summary_macrofound = M_FALSE
     worksheet.set_column('A:A', 50)
     worksheet.set_column('B:B', 50)
     worksheet.set_column('C:C', 50)
@@ -101,29 +106,37 @@ def macro_export(mname, mfile, mline, excel_fname):
     worksheet.write('D1', "Duplicate Macro Count (found:" + str(len(dup_found)) +")")
     
     ex_len = len(mname)
+    #print(mline[0])
     
     for e in range(ex_len):
         worksheet.write('A' + str(e+2), str(mname[e]), text_format) 
-        
-        #tstr1 = str(result_csvfile[e])
-        #tstr = tstr1.replace('[','')   
-        #tstr2 = tstr.replace(']','')
-        #worksheet.write('B' + str(e+2),tstr2, text_format) # str(result_csvfile[e]))
-        #worksheet.write('B' + str(e+2), str(result_csvfile[e]), text_format)
         worksheet.write('B' + str(e+2), str(mfile[e]), text_format)
-        worksheet.write('C' + str(e+2), str(mline[e]),text_format)
-        worksheet.write('D' + str(e+2), str(len(mline[e])),text_format)
-        if len(mline[e]) > 1:
-             worksheet.write('E' + str(e+2), "DUPLICATE FOUND",text_format)
-        else:
-             worksheet.write('E' + str(e+2), "NO DUPLICATE",text_format)
+        worksheet.write('C' + str(e+2), str(mline[e]), text_format)
+        try:
+           worksheet.write('D' + str(e+2), str(len(mline[e])),text_format)
+           summary_macrofound = M_TRUE
+        except:
+           worksheet.write('D' + str(e+2), str('None'),text_format)
+           summary_macrofound = M_FALSE   
+
+        try:
+            if len(mline[e]) > 1:
+                 worksheet.write('E' + str(e+2), "DUPLICATE FOUND",text_format)
+            else:
+                 worksheet.write('E' + str(e+2), "NO DUPLICATE",text_format)
+        except:
+            worksheet.write('E' + str(e+2), "NO DUPLICATE",text_format)
+
 
     worksheet.write('A' + str(e+4), "TOTAL NUMBER of MACRO", text_format)
     worksheet.write('B' + str(e+4),str(ex_len), text_format)   
     worksheet.write('A' + str(e+5), "TOTAL NUMBER of DUPLICATE MACRO", text_format)
     worksheet.write('B' + str(e+5),str(len(dup_found)), text_format)
 
-    report_summmary.append([excel_fname,str(ex_len),str(len(dup_found))])
+    if summary_macrofound == M_TRUE:
+        report_summmary.append([excel_fname,str(ex_len),str(len(dup_found))])
+    else:
+        report_summmary.append([excel_fname,str(0),str(0)])
 
     workbook.close()
 
